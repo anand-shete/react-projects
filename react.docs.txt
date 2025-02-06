@@ -1,0 +1,190 @@
+React is a JavaScript library for building user interfaces, primarily for single-page applications. 
+You decide how to structure your application and call React to render components.
+It is Developed by Facebook and widely used in modern web development.
+
+// What is JSX?
+JSX (JavaScript XML) is a syntax extension for JavaScript, commonly used with React to describe what the UI should look like. It looks very similar to HTML but is actually a way to write JavaScript that can create React elements.
+
+
+// Vite
+Vite is a fast build tool and development server, often used with modern frameworks like React, Vue, and others. It provides a smooth developer experience with fast hot module replacement (HMR) and optimized production builds.
+
+// create-react-app vs Vite 
+    CRA uses Webpack to bundle all files during development. It creates a large bundle upfront, which can be time-consuming. Every change triggers a full rebuild or partial rebuild, which can get slower as the project grows.
+    Vite serves your source files as native ES modules in the browser instead of bundling everything upfront During development, it only processes and sends the code you’re currently working on, leading to instant startup and faster updates. Uses esbuild (written in Go) for lightning-fast dependency pre-bundling.
+Result: vite is faster than create-react-app
+
+npx create-next-app app-name            // creates a new Next.js application.
+npm create vite app-name
+npx create-react-app app-name           // using a stupid command               
+
+// npm run build
+This command creates an optimized production-ready build of the application.
+It minifies the JavaScript, CSS, and other assets to reduce file sizes. Optimizes the code by removing unused imports (tree-shaking). Bundles all the resources (HTML, CSS, JS, etc.) into static files that can be deployed to a web server. Generates files typically in a folder named build (for create-react-app) or dist (for Vite).
+
+// npm run preview
+This command allows us to preview the production build locally before deploying it.
+Serves the production build (dist folder) locally on a lightweight server. Useful for testing how the app behaves in a production-like environment. local server mimics how the application will behave after deployment.
+
+
+// Linter
+A linter is a tool that analyzes your code to identify potential errors and styling issues according to a set of predefined rules. These rules ensure that your code is written in a consistent way and follows best practices. The goal is to catch bugs early, improve readability, and enforce coding standards.
+For example, linters might check:
+    If you're using semicolons correctly.
+    Whether you're using consistent indentation (spaces vs. tabs).
+    If your variable names are clear and follow naming conventions.
+    Whether you’re using certain JavaScript features in a way that might lead to bugs.
+
+// ESLint
+ESLint is one of the most popular linters for JavaScript (and TypeScript) code. It helps you identify and fix problems in your JavaScript codebase before they become bigger issues.
+ESLint works by analyzing your code according to a configuration file (.eslintrc), which defines the rules for linting. You can either use a pre-made configuration or customize it to fit your project’s needs.
+
+
+
+// glob patterns
+./src/
+    This refers to the src directory, relative to the current directory (denoted by ./). All the search starts from here.
+**
+    This is a special wildcard in glob patterns. It stands for "match anything recursively," meaning it will match any directory and subdirectory within the src folder. It includes any level of nested folders.
+*
+    This wildcard matches any file name within those directories. The single * matches any file or folder name but does not span across / (i.e., it will only match file names or folders at a 'single' level).
+.{js,jsx,ts,tsx}
+    This specifies file extensions to match. It says: "only match files that end with .js, .jsx, .ts, or .tsx
+
+
+
+// Configuring tailwind with Vite 
+https://tailwindcss.com/docs/installation/using-vite
+npm install tailwindcss @tailwindcss/vite
+Inside vite.config.js:
+  plugins: [tailwindcss(), react()],
+Add decorators inside index.css:
+    @import "tailwindcss";
+Change VS Code settings to treat all .css files as tailwindcss
+"files.associations": {
+  "*.css": "tailwindcss"
+}
+
+
+// React Fragments
+The <> and </> syntax in React is called a React Fragment. It is used to group multiple elements without adding an extra DOM node (like a <div> or <span>).
+Normally, when returning multiple elements, we must wrap them in a parent container like <div>. Fragments make the JSX more concise and clean by removing unnecessary wrapper elements.
+It is a shorthand for <React.Fragment>
+
+
+
+
+// Virtual DOM
+The Virtual DOM is a lightweight, in-memory representation of the actual DOM (Document Object Model). It allows React to optimize rendering and updates by minimizing direct manipulations of the real DOM.
+When a component’s state or props change, React creates a new Virtual DOM tree that reflects these changes. It then compares this new tree with the previous Virtual DOM tree using a process called diffing. After identifying the differences (or "diffs"), React calculates the most efficient way to update the real DOM, minimizing the number of changes made.This process results in improved performance, as direct updates to the DOM can be slow.
+
+// Fiber
+Fiber is the reconciliation algorithm introduced in React 16 to enhance the performance and capabilities of the Virtual DOM. It enables React to split rendering work into chunks and prioritize updates.
+Fiber allows React to pause, abort, or restart rendering work, making it more responsive to user interactions.
+
+// Reconciliation
+Reconciliation is the algorithm behind what is popularly understood as the "virtual DOM." 
+A high-level description goes something like this: when we render a React application, a tree of nodes that describes the app is generated and saved in memory. This tree is then flushed to the rendering environment — for example, in the case of a browser application, it's translated to a set of DOM operations. When the app is updated (usually via setState), a new tree is generated. The new tree is diffed with the previous tree to compute which operations are needed to update the rendered app.
+
+// Summary
+Virtual DOM: An in-memory representation of the actual DOM that optimizes updates and rendering.
+Fiber: The reconciliation algorithm that allows incremental rendering, prioritization of updates, and improved performance.
+Reconciliation: The process of comparing Virtual DOM trees to determine the necessary updates to the real DOM, ensuring efficient rendering.
+
+
+// Killing a process (windows)
+netstat -ano | findstr :5173
+taskkill /PID <PID> /F
+
+
+// Props
+In React, props (short for "properties") are a way of passing data from one component to another. They allow us to customize a child component based on the values passed to it by its parent component.
+Props are used to pass data and event handlers from parent to child components.
+Props are read-only and should not be modified inside the child component.
+Props can be of any type, including strings, numbers, arrays, functions, etc. We can destructure props in the child component for cleaner code. React uses defaultProps to set default values for props if not passed by the parent.
+PropTypes can be used for type-checking props.
+
+// How to properly pass className in props ??
+don’t, just import tailwindcss in index.css file not in App.css
+
+
+
+// Hooks
+Hooks are special functions in React that allow us to use state, lifecycle methods, and other React features in functional components. Before hooks, these features were only available in class components.
+Introduced in React 16.8, hooks simplify React development by eliminating the need for class components
+    Eg. useState, useCallback, useEffect, useContext
+Use hooks in functional components when:
+    State or lifecycle management is needed.
+    Complex logic needs to be shared between components.
+    Side effects like data fetching or subscriptions are required.
+
+// useState
+useState is a React hook that allows components to have local state. It lets us store and update values inside a component without needing a class component.
+Syntax:
+    const [value, setValue] = useState(initial);
+
+    value: The current state value. Initially, it holds the value passed to useState
+    setValue: A function to update the state. Calling setValue(10) updates value to 10 and re-renders the component on which useState is used with the new state. Hence, the component is re-rendered after every update
+Key Points About useState:
+    State Updates Are Asynchronous: State does not update immediately. React batches state updates for performance reasons. Hence, simply doing setValue(value + 1) won't necessarily increment the value by 1
+    useState can store different types of values: String, Boolean, Object, Array, etc.
+Best Practices:
+    Always use functional updates when the new state depends on the previous state
+    Avoid modifying state directly. count++ (Wrong),     setCount(count + 1) (Right)
+
+
+// useCallback
+useCallback is a React Hook that lets you cache a function definition between re-renders. It is particularly useful when passing functions as props to child components or when a function is dependent on changing values from the component's state or props.
+When a React component re-renders, any functions defined inside it are recreated. This can lead to unnecessary re-renders in child components if those functions are passed down as props, because their reference changes every time.
+To prevent this, useCallback ensures the function maintains the same reference unless its dependencies change. This improves performance and avoids unnecessary rendering.
+Syntax: 
+    const memoizedCallback = useCallback(() => {
+        // Function logic here
+    }, [dependencies] );
+
+    memoizedCallback: The returned memoized version of the callback function.
+    [dependencies]: An array of values that the callback depends on. The function is re-created only when one of these dependencies changes. React guarantees that state setter functions (setPassword) never change between renders, so we don’t need to include it in the dependencies array.
+
+Common Pitfalls:
+    Overusing useCallback: If the function is not passed as a prop or isn't causing performance issues, using useCallback is unnecessary. It can add complexity without any benefit.
+    Failing to include all required dependencies in the dependency array can lead to stale values or bugs.
+    useCallback does not prevent a component from re-rendering. It only memoizes the function reference.
+
+
+// useEffect
+The useEffect hook in React is used to perform side effects in functional components. Side effects can include things like data fetching, subscriptions, DOM manipulations, or setting up timers.
+Syntax:
+    useEffect(() => {
+        // Effect logic
+    return () => {
+        // Cleanup logic (optional)
+    };
+    }, [dependencies]);
+
+    Callback: The function passed to useEffect contains the logic for the side effect. This can include things like fetching data, adding event listeners, or updating state.
+    Cleanup Function (Optional): If useEffect sets up resources (e.g., event listeners or subscriptions), it can return a cleanup function to clean up those resources when the component unmounts or before the effect runs again.
+    [dependencies]: The second argument to useEffect is an array of dependencies. It determines when the effect should re-run.
+    Empty Array ([]): Runs the effect only once, after the initial render.
+    No Array (undefined): Runs the effect after every render.
+    Specific Dependencies: Runs the effect only when the listed dependencies change.
+
+Things to Keep in Mind:
+    Avoid Infinite Loops: Ensure the dependency array includes all variables used inside the effect to avoid stale values or unnecessary re-runs.
+    Cleanup for Resources: Always clean up subscriptions, event listeners, or intervals to avoid memory leaks.
+    Split unrelated side effects into separate useEffect calls for better readability and maintainability.
+
+
+// useRef
+The useRef hook in React is used to create a mutable reference that persists across renders without causing re-renders. It is primarily used for:
+    Accessing DOM elements directly (e.g., input fields, buttons).
+    Storing values that don’t trigger re-renders when updated (like instance variables in class components).
+    Keeping references to previous state or props.
+
+// Syntax
+const refName = useRef(initialValue);
+    initialValue: The initial value of the ref.
+    refName.current: It gives us the referenced element, allowing us to call methods without triggering a re-render
+
+
+
+anchor tag or <a> tag is not used in React as it refreshes the whole page which is not the concept of react, that's why Link tag is used in react which is imported from react-router-dom
