@@ -1,62 +1,99 @@
-import React from "react";
 import { useState, useEffect } from "react";
+import InputBox from "./Components/InputBox";
 import useCurrencyAPI from "./hooks/useCurrencyAPI";
-import InputBox from "./components/InputBox";
 
 export default function App() {
-  const [from, setFrom] = useState("usd");
-  const [to, setTo] = useState("inr");
-  const [amount, setAmount] = useState(0);
-  const [convertedAmount, setConvertedAmount] = useState(0);
+  // states to update currency code
+  const [from, setFrom] = useState("1inch");
+  const [to, setTo] = useState("1inch");
 
-  // const [currencyOptions, setCurrencyOptions] = useState({});
-  // setCurrencyOptions(useCurrencyAPI("usd"));
-  // useState Updates Trigger a Re-render. Calling setCurrencyOptions updates the state. When state updates, the component re-renders. useCurrencyAPI("usd") Runs on Every Render
-  // useCurrencyAPI is a custom hook, meaning it runs every time the component renders. Since useCurrencyAPI fetches data and updates state, it returns new data on every render. The new data triggers setCurrencyOptions, causing another re-render. This creates an infinite loop of re-renders.
+  // states to update amount fields
+  const [amount, setAmount] = useState("");
+  const [convertedAmount, setConvertedAmount] = useState("");
 
-  // Now, we can use useEffect Hook with empty dependency array [] to render a component only once
-  // useEffect(() => {
-  //   setCurrencyOptions(useCurrencyAPI("usd"));
-  // }, []);
-  // But, Hooks (like useCurrencyAPI) must be called inside the component body, not inside useEffect or any other function. We cannot call hooks conditionally, inside loops, or nested inside other functions.
-
-  const currencyObject = useCurrencyAPI("usd");
+  // fetching the currency options for the select fields
+  const currencyObject = useCurrencyAPI(from);
   const currencyOptions = Object.keys(currencyObject);
 
+  // function to setConvertedAmount
   const convert = () => {
-    // console.log("amount", amount);
-    // console.log("from", from);
-    // console.log("to", to);
-    // console.log("multiplier", currencyObject[to]);
-    // console.log(amount * currencyObject[to]);
-
-    setConvertedAmount(amount * currencyInfo[to]);
+    setConvertedAmount(amount * currencyObject[to]);
+    // console.log("convertedAmount", convertedAmount);      // React does not update the state immediately. It batches state updates and re-renders the component after the update is processed, we wont see the changes to a state immediately. we will have to use useEffect hook with given state as dependency
   };
 
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        convert();
-      }}
-    >
-      <div className=" w-screen h-screen flex justify-center items-center  bg-[url('./bg.jpg')] bg-no-repeat bg-center bg-cover">
-        {/* adding a black background Overlay */}
-        <div className="absolute w-screen h-screen bg-black opacity-50"></div>
+  const swap = () => {
+    setFrom(to);
+    setTo(from);
+    setAmount(convertedAmount);
+    setConvertedAmount(amount);
+  };
 
-        <InputBox
-          className="z-1 bg-blue-200 h-1/2 w-1/2 rounded-2xl flex flex-col justify-evenly  items-center"
-          currencyOptions={currencyOptions}
-          from={from}
-          setFrom={(from) => setFrom(from)}
-          setTo={(to) => setTo(to)}
-          amount={amount}
-          setAmount={(amount) => setAmount(amount)}
-          setConvertedAmount={(amount) => setConvertedAmount(amount)}
-          currencyObject={currencyObject}
-          convertedAmount={convertedAmount}
-        />
+  /*const swap = () => {
+    setFrom((prevFrom) => {
+      setTo(prevFrom); // Swap currency codes
+      return to; // Return new 'from' value
+    });
+
+    setAmount((prevAmount) => {
+      setConvertedAmount(prevAmount); // Swap amounts
+      return convertedAmount; // Return new amount value
+    });
+  };*/
+  
+  return (
+    <div
+      className="w-full h-screen flex flex-wrap justify-center items-center 
+      bg-[url('./bg.jpg')] bg-cover bg-no-repeat"
+    >
+      <div className="w-full">
+        <div className="w-full max-w-md mx-auto border border-gray-60 rounded-lg p-5 backdrop-blur-sm bg-white/30">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              convert();
+            }}
+          >
+            {/* From InputBox */}
+            <div className="w-full mb-1">
+              <InputBox
+                label="From"
+                currencyOptions={currencyOptions}
+                amount={amount}
+                onAmountChange={(amount) => setAmount(amount)} // Updates the variable 'amount' state when InputBox triggers onAmountChange.
+                onOptionChange={(option) => setFrom(option)}
+              />
+            </div>
+
+            {/* swap button */}
+            <div className="relative w-full h-0.5">
+              <button
+                type="button"
+                className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-md bg-blue-600 text-white px-2 py-0.5 cursor-pointer"
+                onClick={swap}
+              >
+                swap
+              </button>
+            </div>
+
+            {/* To InputBox */}
+            <div className="w-full mt-1 mb-4">
+              <InputBox
+                label="To"
+                currencyOptions={currencyOptions}
+                amount={convertedAmount}
+                onOptionChange={(option) => setTo(option)}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg"
+            >
+              Convert
+            </button>
+          </form>
+        </div>
       </div>
-    </form>
+    </div>
   );
 }

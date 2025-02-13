@@ -1,0 +1,7 @@
+A .jsx file always return jsx component
+When using () in an arrow function, return is implicit—no need to write it explicitly
+
+Inside .jsx, when we use {} to embed JavaScript, whatever is inside must return a value.
+JSX Expects an Expression, Not a statement like if, for, etc. since they don’t return values.
+Expressions like ternary operator, return statement, .map function return values, so they can be used in {}.
+expression that return null or undefined are Ignored and nothing is rendered inside {}

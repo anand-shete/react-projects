@@ -1,89 +1,43 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 export default function InputBox({
-  className,
-  currencyOptions,
-  from,
-  setFrom,
-  setTo,
-  amount,
-  setAmount,
-  setConvertedAmount,
-  currencyObject,
-  convertedAmount,
+  label = "",
+  currencyOptions = [],
+  className = "",
+  amount = "",
+  onAmountChange,
+  onOptionChange,
 }) {
   return (
-    <div className={`${className}`}>
-      <div className="py-5 px-20 bg-white rounded-2xl">
-        <label htmlFor="currencyOptions">From</label>
-        <select
-          name="currencyOptions"
-          id="currencyOptions"
-          className="mx-10"
-          defaultValue={currencyOptions[292]}
-          onChange={(e) => setFrom(e.target?.value)}
-        >
-          {currencyOptions.map((countryCode) => (
-            <option key={countryCode} value={countryCode}>
-              {countryCode}
-            </option>
-          ))}
-        </select>
+    <div className={`bg-white p-3 rounded-lg text-sm flex ${className}`}>
+      <div className="w-1/2">
+        <label className="text-black/40 mb-2 inline-block">{label}</label>
         <input
-          type="number"
-          name="from"
-          id="from"
+          className="outline-none w-full bg-transparent py-1.5 border rounded-md text-center"
           value={amount}
+          onChange={(e) => onAmountChange(Number(e.target.value))}
+          type="number"
           placeholder="Amount"
-          className="h-10 text-center"
-          onChange={(e) => {
-            setAmount(Number(e.target?.value));
-            setConvertedAmount(amount * currencyObject[from]);
-          }}
         />
       </div>
 
-      {useEffect(() => {
-        // console.log(from);
-        // console.log(currencyOptions[from]);
-        // console.log(currencyObject[from]);
-        // console.log(amount * currencyOptions[from]);
-      }, [amount])}
-
-      <div className="py-5 px-20 bg-white rounded-2xl">
-        <label htmlFor="currencyOptions">From</label>
+      <div className="w-1/2 flex flex-wrap justify-end text-right">
+        <p className="text-black/40 mb-2 w-full">Currency Type</p>
         <select
-          name="currencyOptions"
-          id="currencyOptions"
-          className="mx-10"
-          defaultValue={currencyOptions[5]}
-          onChange={(e) => setTo(e.target?.value)}
+          className="rounded-lg px-1 py-1 bg-gray-100 cursor-pointer outline-none"
+          onChange={(e) => onOptionChange(e.target.value)}
         >
-          {currencyOptions.map((countryCode) => (
+          {currencyOptions.map((currency) => (
             <option
-              key={countryCode}
-              value={countryCode}
-              defaultValue={currencyOptions[5]}
+              key={currency}
+              value={currency}
+              defaultValue={currencyOptions[292]}
             >
-              {countryCode}
+              {currency}
             </option>
           ))}
         </select>
-        <input
-          type="number"
-          name="to"
-          id="to"
-          placeholder="Amount"
-          className="h-10 text-center"
-        />
       </div>
-
-      <button
-        type="submit"
-        className="bg-blue-500 px-20 py-3 rounded-2xl cursor-pointer"
-      >
-        Convert
-      </button>
     </div>
   );
 }

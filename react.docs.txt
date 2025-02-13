@@ -1,6 +1,15 @@
-React is a JavaScript library for building user interfaces, primarily for single-page applications. 
-You decide how to structure your application and call React to render components.
+// Library vs Framework
+Library:
+    A library is like a toolbox. We pick and use the functions we need. We are in control of when and how to call the functions. A library is like ordering food from a menu—we choose what we want.
+    Example: Lodash (JavaScript) → It provides utility functions, but we decide when to use them.
+Framework
+    A framework is like a template or skeleton. It provides a structure, and we fill in the missing parts. The framework is in control, it calls our code at the right time (Inversion of Control). A framework is like a meal kit—it tells us how to cook and when to do each step.
+    Example: React → We write components, but React decides when to update the UI.
+
+// What is React.js
+React is a JavaScript library for building user interfaces, primarily for single-page applications. We decide how to structure your application and call React to render components.
 It is Developed by Facebook and widely used in modern web development.
+
 
 // What is JSX?
 JSX (JavaScript XML) is a syntax extension for JavaScript, commonly used with React to describe what the UI should look like. It looks very similar to HTML but is actually a way to write JavaScript that can create React elements.
@@ -20,7 +29,7 @@ npx create-react-app app-name           // using a stupid command
 
 // npm run build
 This command creates an optimized production-ready build of the application.
-It minifies the JavaScript, CSS, and other assets to reduce file sizes. Optimizes the code by removing unused imports (tree-shaking). Bundles all the resources (HTML, CSS, JS, etc.) into static files that can be deployed to a web server. Generates files typically in a folder named build (for create-react-app) or dist (for Vite).
+It minifies the JavaScript, CSS, and other assets to reduce file sizes. Optimizes the code by removing unused imports (tree-shaking). Bundles all the resources (HTML, CSS, JS, etc.) into static files that can be deployed to a web server. Generates files typically in a folder named build or dist.
 
 // npm run preview
 This command allows us to preview the production build locally before deploying it.
@@ -41,24 +50,14 @@ ESLint works by analyzing your code according to a configuration file (.eslintrc
 
 
 
-// glob patterns
-./src/
-    This refers to the src directory, relative to the current directory (denoted by ./). All the search starts from here.
-**
-    This is a special wildcard in glob patterns. It stands for "match anything recursively," meaning it will match any directory and subdirectory within the src folder. It includes any level of nested folders.
-*
-    This wildcard matches any file name within those directories. The single * matches any file or folder name but does not span across / (i.e., it will only match file names or folders at a 'single' level).
-.{js,jsx,ts,tsx}
-    This specifies file extensions to match. It says: "only match files that end with .js, .jsx, .ts, or .tsx
-
-
 
 // Configuring tailwind with Vite 
 https://tailwindcss.com/docs/installation/using-vite
 npm install tailwindcss @tailwindcss/vite
-Inside vite.config.js:
-  plugins: [tailwindcss(), react()],
-Add decorators inside index.css:
+Inside vite.config.js
+    import tailwindcss from '@tailwindcss/vite';
+    plugins: [tailwindcss(), react()],
+Add decorators inside index.css
     @import "tailwindcss";
 Change VS Code settings to treat all .css files as tailwindcss
 "files.associations": {
@@ -68,8 +67,7 @@ Change VS Code settings to treat all .css files as tailwindcss
 
 // React Fragments
 The <> and </> syntax in React is called a React Fragment. It is used to group multiple elements without adding an extra DOM node (like a <div> or <span>).
-Normally, when returning multiple elements, we must wrap them in a parent container like <div>. Fragments make the JSX more concise and clean by removing unnecessary wrapper elements.
-It is a shorthand for <React.Fragment>
+Normally, when returning multiple elements, we must wrap them in a parent container like <div>. Fragments make the JSX more concise and clean by removing unnecessary wrapper elements. It is a shorthand for <React.Fragment>
 
 
 
@@ -99,24 +97,16 @@ taskkill /PID <PID> /F
 
 // Props
 In React, props (short for "properties") are a way of passing data from one component to another. They allow us to customize a child component based on the values passed to it by its parent component.
-Props are used to pass data and event handlers from parent to child components.
 Props are read-only and should not be modified inside the child component.
 Props can be of any type, including strings, numbers, arrays, functions, etc. We can destructure props in the child component for cleaner code. React uses defaultProps to set default values for props if not passed by the parent.
 PropTypes can be used for type-checking props.
-
-// How to properly pass className in props ??
-don’t, just import tailwindcss in index.css file not in App.css
 
 
 
 // Hooks
 Hooks are special functions in React that allow us to use state, lifecycle methods, and other React features in functional components. Before hooks, these features were only available in class components.
 Introduced in React 16.8, hooks simplify React development by eliminating the need for class components
-    Eg. useState, useCallback, useEffect, useContext
-Use hooks in functional components when:
-    State or lifecycle management is needed.
-    Complex logic needs to be shared between components.
-    Side effects like data fetching or subscriptions are required.
+    Eg. useState, useCallback, useEffect, useContext,..
 
 // useState
 useState is a React hook that allows components to have local state. It lets us store and update values inside a component without needing a class component.
@@ -124,19 +114,19 @@ Syntax:
     const [value, setValue] = useState(initial);
 
     value: The current state value. Initially, it holds the value passed to useState
-    setValue: A function to update the state. Calling setValue(10) updates value to 10 and re-renders the component on which useState is used with the new state. Hence, the component is re-rendered after every update
+    setValue: A function to update the state. Calling setValue(10) updates value to 10 and re-renders the component on which useState is used with the new state. Hence, the component is re-rendered after every update. It also has a parameter when called contains the value of the previous state
 Key Points About useState:
-    State Updates Are Asynchronous: State does not update immediately. React batches state updates for performance reasons. Hence, simply doing setValue(value + 1) won't necessarily increment the value by 1
+    State Updates Are Asynchronous: State does not update immediately. React batches state updates for performance reasons. Hence, simply logging immediately after updating state won't log the result.
     useState can store different types of values: String, Boolean, Object, Array, etc.
 Best Practices:
-    Always use functional updates when the new state depends on the previous state
-    Avoid modifying state directly. count++ (Wrong),     setCount(count + 1) (Right)
+    Always use functional updates when the new state depends on the previous state by utilizing the parameter inside setValue which contains the prev value
 
 
 // useCallback
-useCallback is a React Hook that lets you cache a function definition between re-renders. It is particularly useful when passing functions as props to child components or when a function is dependent on changing values from the component's state or props.
-When a React component re-renders, any functions defined inside it are recreated. This can lead to unnecessary re-renders in child components if those functions are passed down as props, because their reference changes every time.
-To prevent this, useCallback ensures the function maintains the same reference unless its dependencies change. This improves performance and avoids unnecessary rendering.
+When a React component re-renders, any functions defined inside it are recreated. This can lead to unnecessary re-renders in child components if those functions are passed down as props, because their reference changes every time. To prevent this, useCallback ensures the function maintains the same reference unless its dependencies change. This improves performance and avoids unnecessary rendering.
+Use Cases:
+    Passing a function as a prop to child components to prevent unnecessary re-renders.
+    Storing a function in a dependency array of useEffect to avoid infinite loops.
 Syntax: 
     const memoizedCallback = useCallback(() => {
         // Function logic here
@@ -144,7 +134,6 @@ Syntax:
 
     memoizedCallback: The returned memoized version of the callback function.
     [dependencies]: An array of values that the callback depends on. The function is re-created only when one of these dependencies changes. React guarantees that state setter functions (setPassword) never change between renders, so we don’t need to include it in the dependencies array.
-
 Common Pitfalls:
     Overusing useCallback: If the function is not passed as a prop or isn't causing performance issues, using useCallback is unnecessary. It can add complexity without any benefit.
     Failing to include all required dependencies in the dependency array can lead to stale values or bugs.
@@ -153,6 +142,12 @@ Common Pitfalls:
 
 // useEffect
 The useEffect hook in React is used to perform side effects in functional components. Side effects can include things like data fetching, subscriptions, DOM manipulations, or setting up timers.
+Uses:
+    Fetching data from an API.
+    Listening to events (e.g., window resize).
+    Updating the DOM (e.g., changing the title).
+    Setting up subscriptions (e.g., WebSockets, intervals).
+    Its first called when a component is loaded inside the DOM
 Syntax:
     useEffect(() => {
         // Effect logic
@@ -167,24 +162,145 @@ Syntax:
     Empty Array ([]): Runs the effect only once, after the initial render.
     No Array (undefined): Runs the effect after every render.
     Specific Dependencies: Runs the effect only when the listed dependencies change.
-
-Things to Keep in Mind:
+Common Pitfalls:
     Avoid Infinite Loops: Ensure the dependency array includes all variables used inside the effect to avoid stale values or unnecessary re-runs.
     Cleanup for Resources: Always clean up subscriptions, event listeners, or intervals to avoid memory leaks.
     Split unrelated side effects into separate useEffect calls for better readability and maintainability.
 
 
 // useRef
-The useRef hook in React is used to create a mutable reference that persists across renders without causing re-renders. It is primarily used for:
-    Accessing DOM elements directly (e.g., input fields, buttons).
-    Storing values that don’t trigger re-renders when updated (like instance variables in class components).
-    Keeping references to previous state or props.
+The useRef hook in React is used to create a mutable reference that persists across renders without causing re-renders.
+Use it when:
+    Accessing DOM elements (e.g., focus an input).
+    Storing mutable values that don’t trigger re-renders.
+    Keeping previous values between renders.
+Syntax
+    const inputRef = useRef(initialValue);
+    const focusInput = () => {
+        console.log(inputRef.current);
+    };
+    return <input ref={inputRef} />;
 
-// Syntax
-const refName = useRef(initialValue);
     initialValue: The initial value of the ref.
-    refName.current: It gives us the referenced element, allowing us to call methods without triggering a re-render
+    inputRef.current: It gives us the referenced element, allowing us to call methods without triggering a re-render
 
 
 
-anchor tag or <a> tag is not used in React as it refreshes the whole page which is not the concept of react, that's why Link tag is used in react which is imported from react-router-dom
+
+// Link and NavLink
+Using an <a> tag in a React app causes a full page reload. 
+Meaning: The entire application reloads, losing all component state. It makes navigation slower because the browser requests a new HTML page from the server. React's virtual DOM is bypassed, reducing performance benefits.
+Link:
+    The Link component is used to navigate between pages without reloading the whole application.
+    It prevents full-page reload. Uses React Router's client-side navigation. Keeps application state intact.    Use Link for basic navigation.
+NavLink:
+    https://reactrouter.com/start/library/navigating
+    The NavLink component is similar to Link, but it adds an active CSS class when the link is active.
+    Whenever a NavLink is active, it will automatically have an .active class name for easy styling with CSS.
+    It also has callback props on className, style, and children with the active state for inline styling or conditional rendering
+    It provides an isActive ClassName prop to style the active link. Helps in UI/UX to highlight the current page.  Use NavLink when active styling is needed.
+
+
+
+// react-router
+react-router is the standard library for handling routing in React applications. It allows us to navigate between different pages or components without reloading the page, allowing a seamless Single Page Application experience.
+Key Features of React Router:
+    Define routes in a declarative manner using JSX, making the code more readable and maintainable.
+    Support for nested routing structures, allowing complex UI hierarchies to be represented cleanly.
+    Handle dynamic segments in URLs, enabling parameterized routes for resources like user profiles or product pages
+    Implement authentication and authorization checks to protect certain routes from unauthorized access.
+    Navigate between routes programmatically using hooks like useNavigate, enhancing user interactions.
+
+// Core Components and Hooks:
+<Router>: The base component that enables routing in an application. Depending on the environment, different routers are used:
+    <BrowserRouter>: For web applications, uses the HTML5 history API.
+    <MemoryRouter>: Keeps the history of your "URL" in memory (does not read or write to the address bar), useful in testing or non-browser environments.
+    <StaticRouter>: Useful in environments where the app's location never actually changes, like when rendering a single route to static HTML on a server. 
+<Routes> and <Route>: Define the mapping between URLs and components. <Routes> is a container for multiple <Route> elements.
+<Link> and <NavLink>: Components for navigation without full page reloads. <NavLink> provides additional styling attributes when the link is active.
+
+// Hooks:
+    useParams: Access URL parameters.
+    useNavigate: Programmatically navigate to different routes. Reserve usage of useNavigate to situations where the user is not interacting but you need to navigate, for example: After a form submission completes, Logging them out after inactivity, Timed UIs like quizzes, etc.
+    useSearchParams: Search params are the values after a ? in the URL. They are accessible from useSearchParams, which returns an instance of URLSearchParams
+    useLocation: Access the current location object, which contains information about the current URL.
+
+
+// <Route> examples
+<Routes>
+    <Route path="/" element={<Layout />}>               // Absolute path ignores parent
+        <Route index element={<Home />} />              // Nested route. index attribute is used to designate a  default child route within a parent route. index replaces path="/" for child routes. It acts as the default route when no additional path is specified. It does not require a path attribute. There can be only one index route per parent, as it represents the default case.
+
+        <Route path="about" element={<About />} />      // Since this is nested Route, its relative to parent. So, this route will automatically be /about 
+
+        <Route path="user/:userId" element={<User />} />        // If a path segment starts with : then it becomes a "dynamic segment". When the route matches the URL, the dynamic segment will be parsed from the URL and provided as params to other router APIs like useParams. Then we can access these params in User Component as let { userId } = useParams(); 
+        We can have multiple dynamic segments in one route path="/c/:categoryId/p/:productId"
+
+        <Route path=":lang?/categories" element={<Categories />} />         // You can make a route segment optional by adding a ? to the end of the segment.
+
+
+    </Route>
+</Routes>
+
+
+// loader
+In React Router, the loader attribute in a <Route> component is a powerful feature that allows you to fetch and prepare data before a route is rendered. This ensures that your components have the necessary data available upon rendering, enhancing the user experience by preventing empty states or loading indicators within the component itself.
+When a route with a loader is matched, React Router executes the specified loader function. This function can perform asynchronous operations, such as fetching data from an API. Once the data is retrieved, it is made available to the component through hooks like useLoaderData.
+
+
+
+
+
+// Context API 
+export const MyContext = createContext({
+    user: [{
+        id: 1,
+        name: "default name",
+        status: false
+    }],
+    demoFunc: (param) => { },       // function placeholders are passed inside context 
+})
+export const MyProvider = MyContext.Provider;               // This is the parent component which will be actually used
+export function useTodo() {         // generally a custom hook is made to prvent impoting Context everyerhe
+    return useContext(MyContext);
+}
+
+// usage
+// after defining functions and states, we have to pass them as value attribute inside our provider so child components can access and modify and update them at all places. This prevents us from passsing prop each time to each and every component.
+<MyProvider value={{}}> 
+    {/* contains code that will use the context  */ }
+</MyProvider>
+
+
+
+
+
+
+// Redux
+A JavaScript library for managing application state in a predictable, centralized way.
+Redux and React-Redux serve the same purpose as the Context API—managing and sharing state across multiple components—but in a more structured, scalable, and optimized way.
+    react → Core React library (for building components, state management, etc.).
+    react-native → Used when building mobile apps (iOS & Android).
+    react-dom → Used when building web apps (runs in browsers).
+When to Use Redux?
+    When the app has complex state logic shared across multiple components.
+    When passing props deeply through multiple components becomes messy.
+    When we need a single source of truth for the state.
+
+// Redux Toolkit (RTK) – The Modern Redux Library
+    A wrapper around Redux that simplifies state management.
+    Reduces boilerplate code (includes built-in functions like createSlice, configureStore).
+    Comes with best practices built-in (like using Immer for immutable updates).
+    Includes middleware (like Redux Thunk for async actions).
+
+// React-Redux (Redux Bindings for React)
+    A library that connects Redux to React.
+    Provides hooks like useSelector and useDispatch to interact with the Redux store.
+    Ensures efficient re-renders by optimizing how React components read Redux state.
+Redux → If managing state in any JavaScript project, even without React.
+React-Redux → If using Redux inside a React application for seamless integration.
+
+npm install @reduxjs/toolkit
+npm install react-redux
+
+A slice contains the state, reducers (actions), and initial state in one place.
