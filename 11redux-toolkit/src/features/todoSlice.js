@@ -1,14 +1,19 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
-    todos: [{ id: nanoid(), text: "Demo Todo" }]
+    todos: [{
+        id: nanoid(),
+        text: "Demo Todo"
+    }]
 }
 
 export const todoSlice = createSlice({
     name: 'todo',
     initialState,
     reducers: {
-        addTodo: (state, action) => {  // state - current state, action - data that is being passed
+        // state represents the current state of the slice (or the specific part of the Redux store this reducer is managing). The reducer modifies the state based on the action.
+        // action is an object that contains information about the event that occurred. It typically has two properties: type → A string that defines the type of action (e.g., "removeTodo"). payload → Any additional data needed for the action. In this case, it contains the id of the todo to be removed.
+        addTodo: (state, action) => {
             const todo = {
                 id: nanoid(),
                 text: action.payload,
@@ -20,7 +25,6 @@ export const todoSlice = createSlice({
         },
         // updateTodo
         updateTodo: (state, action) => {
-            // action does not contain id and text directly. action is an object, and the correct way to access payload is action.payload.
             const { id, text } = action.payload;
             const todo = state.todos.find(todo => todo.id === id)
             if (todo) todo.text = text;
@@ -28,5 +32,5 @@ export const todoSlice = createSlice({
     }
 })
 
-export const { addTodo, removeTodo,updateTodo } = todoSlice.actions;
+export const { addTodo, removeTodo, updateTodo } = todoSlice.actions;
 export default todoSlice.reducer;

@@ -192,7 +192,8 @@ Using an <a> tag in a React app causes a full page reload.
 Meaning: The entire application reloads, losing all component state. It makes navigation slower because the browser requests a new HTML page from the server. React's virtual DOM is bypassed, reducing performance benefits.
 Link:
     The Link component is used to navigate between pages without reloading the whole application.
-    It prevents full-page reload. Uses React Router's client-side navigation. Keeps application state intact.    Use Link for basic navigation.
+    It prevents full-page reload. Uses React Router's client-side navigation. Keeps application state intact.    Use Link for basic navigation. 
+    We don't need to give complete URL, replative URL works as well
 NavLink:
     https://reactrouter.com/start/library/navigating
     The NavLink component is similar to Link, but it adds an active CSS class when the link is active.
@@ -204,6 +205,9 @@ NavLink:
 
 // react-router
 react-router is the standard library for handling routing in React applications. It allows us to navigate between different pages or components without reloading the page, allowing a seamless Single Page Application experience.
+    react → Core React library (for building components, state management, etc.).
+    react-native → Used when building mobile apps (iOS & Android).
+    react-dom → Used when building web apps (runs in browsers).
 Key Features of React Router:
     Define routes in a declarative manner using JSX, making the code more readable and maintainable.
     Support for nested routing structures, allowing complex UI hierarchies to be represented cleanly.
@@ -221,7 +225,7 @@ Key Features of React Router:
 
 // Hooks:
     useParams: Access URL parameters.
-    useNavigate: Programmatically navigate to different routes. Reserve usage of useNavigate to situations where the user is not interacting but you need to navigate, for example: After a form submission completes, Logging them out after inactivity, Timed UIs like quizzes, etc.
+    useNavigate: Programmatically navigate to different routes. Reserve usage of useNavigate to situations where the user is not interacting but you need to navigate, for example: redirecting after form submission, Logging them out after inactivity, Timed UIs like quizzes, etc.
     useSearchParams: Search params are the values after a ? in the URL. They are accessible from useSearchParams, which returns an instance of URLSearchParams
     useLocation: Access the current location object, which contains information about the current URL.
 
@@ -252,55 +256,79 @@ When a route with a loader is matched, React Router executes the specified loade
 
 
 // Context API 
-export const MyContext = createContext({
-    user: [{
-        id: 1,
-        name: "default name",
-        status: false
-    }],
-    demoFunc: (param) => { },       // function placeholders are passed inside context 
-})
-export const MyProvider = MyContext.Provider;               // This is the parent component which will be actually used
-export function useTodo() {         // generally a custom hook is made to prvent impoting Context everyerhe
-    return useContext(MyContext);
-}
-
-// usage
-// after defining functions and states, we have to pass them as value attribute inside our provider so child components can access and modify and update them at all places. This prevents us from passsing prop each time to each and every component.
-<MyProvider value={{}}> 
-    {/* contains code that will use the context  */ }
-</MyProvider>
-
+The Context API in React is a built-in state management solution that allows us to share values (such as state, functions, themes, or authentication data) between components without prop drilling. It is useful when multiple components at different nesting levels need access to the same data.
+We use createContext() to create a new context.
+The Provider component makes the context available to its children.
+There are two ways to use context in components:
+🔹 Method 1: Using useContext (Recommended for Functional Components)
+🔹 Method 2: Using Context.Consumer (For Class Components)
+If the application has frequent state updates, context might cause unnecessary re-renders. In such cases, using Redux, Zustand, or Recoil is a better approach.
 
 
 
 
 
 // Redux
-A JavaScript library for managing application state in a predictable, centralized way.
-Redux and React-Redux serve the same purpose as the Context API—managing and sharing state across multiple components—but in a more structured, scalable, and optimized way.
-    react → Core React library (for building components, state management, etc.).
-    react-native → Used when building mobile apps (iOS & Android).
-    react-dom → Used when building web apps (runs in browsers).
-When to Use Redux?
-    When the app has complex state logic shared across multiple components.
-    When passing props deeply through multiple components becomes messy.
-    When we need a single source of truth for the state.
+Redux is a state management library used for managing the state of an application in a predictable way. It is especially useful for large applications where managing state across multiple components becomes complex.
+Core Principles of Redux:
+    Single Source of Truth: The entire application state is stored in a single JavaScript object (store).
+    State is Read-Only: The only way to change the state is by dispatching actions (we can't directly modify the state).
+    Changes are Made with Pure Functions: The logic that modifies the state is written in reducers, which are pure functions (i.e., they return a new state based on the previous state and action).
+Redux Components:
+    Store     → Holds the global state of the application.
+    Actions	  → Plain JavaScript objects that describe what should be done.
+    Reducers  → Functions that determine how the state should change in response to an action.
+    Dispatch  → The function used to send actions to reducers.
+How Redux Works
+    The store is created using createStore().
+    Components dispatch actions using dispatch().
+    The reducers handle these actions and update the state.
+    Components subscribe to the store to get the updated state.
 
-// Redux Toolkit (RTK) – The Modern Redux Library
-    A wrapper around Redux that simplifies state management.
-    Reduces boilerplate code (includes built-in functions like createSlice, configureStore).
-    Comes with best practices built-in (like using Immer for immutable updates).
-    Includes middleware (like Redux Thunk for async actions).
 
-// React-Redux (Redux Bindings for React)
-    A library that connects Redux to React.
-    Provides hooks like useSelector and useDispatch to interact with the Redux store.
-    Ensures efficient re-renders by optimizing how React components read Redux state.
-Redux → If managing state in any JavaScript project, even without React.
-React-Redux → If using Redux inside a React application for seamless integration.
 
+// React-Redux
+React-Redux is a binding library that helps integrate Redux with React applications.
+Why Use React-Redux?
+    Provides React hooks (useSelector, useDispatch) for interacting with the Redux store.
+    Uses the Context API internally to avoid prop drilling.
+    Optimized performance with memoization and selectors.
+Core Features
+    Provider	: Wraps the entire app and gives access to the Redux store.
+    useSelector	: Allows components to access the state from the store.
+    useDispatch	: Allows components to dispatch actions to modify the state.
+
+
+
+// Redux Toolkit (RTK)
+Redux Toolkit (RTK) is the official, recommended way to write Redux code. It simplifies the setup, removes boilerplate code, and improves performance.
+Why Use Redux Toolkit?
+    Less boilerplate (reduces manual action types, reducers, and store setup).
+    Built-in middleware like redux-thunk for handling async operations.
+    Immutable updates with Immer.js, so we can write mutable-looking code.
+    Built-in DevTools support.
+Core Features of RTK
+    configureStore	: Simplifies store setup and enables middleware.
+    createSlice	    : Combines reducers and actions into a single function.
+    createAsyncThunk: Handles asynchronous logic like API calls.
+    useSelector & useDispatch: Same as React-Redux but optimized for RTK.
+How Redux Toolkit Works
+    Define slices using createSlice().
+    Use configureStore() to create the store.
+    Dispatch actions using useDispatch().
+    Access state using useSelector().
+    Use Redux if working in a non-React project (vanilla JS, Vue, etc.).
+    Use React-Redux when integrating Redux into a React app.
+    Use Redux Toolkit for modern React projects (recommended approach).
 npm install @reduxjs/toolkit
 npm install react-redux
 
-A slice contains the state, reducers (actions), and initial state in one place.
+
+
+
+// blog-application
+Appwrite for backend as service 
+Tinymce rich text editor for text editor functionality
+Html-react-parser using to parse html 
+React Hook Forms to hamdle input forms
+Creating .env file to store environment variable
