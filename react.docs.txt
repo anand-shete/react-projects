@@ -24,8 +24,8 @@ Vite is a fast build tool and development server, often used with modern framewo
 Result: vite is faster than create-react-app
 
 npx create-next-app app-name            // creates a new Next.js application.
-npm create vite app-name
-npx create-react-app app-name           // using a stupid command               
+npm create vite ./app-name              // using vite
+npx create-react-app app-name           // using a stupid create-react-app               
 
 // npm run build
 This command creates an optimized production-ready build of the application.
@@ -200,7 +200,7 @@ NavLink:
     Whenever a NavLink is active, it will automatically have an .active class name for easy styling with CSS.
     It also has callback props on className, style, and children with the active state for inline styling or conditional rendering
     It provides an isActive ClassName prop to style the active link. Helps in UI/UX to highlight the current page.  Use NavLink when active styling is needed.
-
+Both of these components render and <a> tag internally
 
 
 // react-router
@@ -332,3 +332,8 @@ Tinymce rich text editor for text editor functionality
 Html-react-parser using to parse html 
 React Hook Forms to hamdle input forms
 Creating .env file to store environment variable
+
+
+
+// axios
+

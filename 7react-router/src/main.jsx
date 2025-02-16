@@ -21,25 +21,11 @@ import "./index.css";
 
 const root = document.getElementById("root");
 
-// Latest Documentation
-// ReactDOM.createRoot(root).render(
-//   <BrowserRouter>
-//     <Routes>
-//       <Route path="/" element={<Layout />}>
-//         <Route index element={<Home />} />
-//         <Route path="about" element={<About />} />
-//         <Route path="contact" element={<Contact />} />
-//         <Route path="user/:userId" element={<User />} />
-//         <Route loader={GitHubLoader} path="github" element={<Github />} />
-//       </Route>
-//     </Routes>
-//   </BrowserRouter>
-// );
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      <Route path="" element={<Home />} />
+      {/* index means this route should not have a path and should be the default visiting child for "/". The index and path attribute should not be used together */}
+      <Route index element={<Home />} />
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
       <Route path="user/:userid" element={<User />} />
